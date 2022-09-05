@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Weathering</string>
+    <string name="error_message">An error occured. Please try again later.</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="weather_main">Sunny</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="time_8_00">08:00 AM</string>
+    <string name="condition_main">condition</string>
+    <string name="search_bar">search bar</string>
+    <string name="temperature_29_c">29°C</string>
+    <string name="weather_picture">weather picture</string>
+    <string name="humidity">Humidity</string>
+    <string name="humid_label">78%</string>
+    <string name="wind">Wind</string>
+    <string name="wind_label_0_82">0.82</string>
+    <string name="pressure">Pressure</string>
+    <string name="pressure_label">101.342</string>
+    <string name="sunrise_label">Sunrise</string>
+    <string name="sunset_label">Sunset</string>
+    <string name="equator_image">equator image</string>
+    <string name="sunset_image">sunset time</string>
+    <string name="sunset_image_label">sunset time</string>
+    <string name="sunrise_image_label">Sunrise time</string>
+    <string name="city_code">PH</string>
+    <string name="Manila_label">Manila</string>
+</resources>

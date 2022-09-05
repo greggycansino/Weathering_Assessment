@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="address_text_size">24sp</dimen>
+    <dimen name="sunrise_text_size">12sp</dimen>
+    <dimen name="time_text_size">14sp</dimen>
+    <dimen name="text_padding">8dp</dimen>
+    <dimen name="image_width">25dp</dimen>
+    <dimen name="image_height">25dp</dimen>
+    <dimen name="average_padding">10dp</dimen>
+    <dimen name="updated_date_label">14sp</dimen>
+    <dimen name="temperature_text_size">90sp</dimen>
+    <dimen name="image_width_25">25dp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="space_5">5dp</dimen>
+    <dimen name="image_width_50">50dp</dimen>
+</resources>
