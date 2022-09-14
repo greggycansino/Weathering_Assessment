@@ -1,4 +1,4 @@
-package com.accenture.weathering.util
+package com.accenture.weathering.data.util
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,8 +7,6 @@ import android.os.Build
 
 object Constants {
 
-    const val APP_ID: String = "3e85b3f91273c953666f29221f1586a5"
-    const val BASE_URL: String = "https://api.openweathermap.org/data/"
     const val METRIC_UNIT: String = "metric"
 
 

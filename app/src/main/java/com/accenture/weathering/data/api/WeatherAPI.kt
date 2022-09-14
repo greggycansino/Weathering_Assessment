@@ -1,7 +1,9 @@
-package com.accenture.weathering.repo
+package com.accenture.weathering.data.api
 
-import com.accenture.weathering.models.CurrentWeather
+import com.accenture.weathering.BuildConfig
+import com.accenture.weathering.data.model.CurrentWeather
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,13 +17,13 @@ interface WeatherAPI {
             @Query("lat") lat: Double,
             @Query("lon") lon: Double,
             @Query("units") units: String?,
-            @Query("appid") appid: String?
-        ): Call<CurrentWeather>
+            @Query("appid") appid: String= BuildConfig.APP_ID
+        ):Call<CurrentWeather>
 
          @GET("2.5/weather")
          fun getCityData(
         @Query("q") cityName: String,
-        @Query("appid") appid: String?
+        @Query("appid") appid: String= BuildConfig.APP_ID
          ): Call<CurrentWeather>
 
 }

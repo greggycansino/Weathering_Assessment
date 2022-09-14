@@ -1,21 +1,16 @@
-package com.accenture.weathering.repo
+package com.accenture.weathering.data.api
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
-import com.accenture.weathering.models.CurrentWeather
-import com.accenture.weathering.util.Constants
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.accenture.weathering.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+//https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
+//    https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
 class WeatherAPIService {
 
     val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
+        .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create()) //transforms data into the right format
         .build()
 

@@ -1,4 +1,4 @@
-package com.accenture.weathering.activities
+package com.accenture.weathering
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,13 +20,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import com.accenture.weathering.BuildConfig.APP_ID
 import com.accenture.weathering.databinding.ActivityMainBinding
-import com.accenture.weathering.models.CurrentWeather
-import com.accenture.weathering.repo.WeatherAPIService
-import com.accenture.weathering.util.Constants
-import com.accenture.weathering.util.Constants.APP_ID
-import com.accenture.weathering.util.Constants.METRIC_UNIT
-import com.accenture.weathering.util.Constants.isNetworkAvailable
+import com.accenture.weathering.data.model.CurrentWeather
+import com.accenture.weathering.data.api.WeatherAPIService
+import com.accenture.weathering.data.util.Constants
+import com.accenture.weathering.data.util.Constants.METRIC_UNIT
+import com.accenture.weathering.data.util.Constants.isNetworkAvailable
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.gson.Gson
@@ -79,6 +79,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             requestLocationData()
+            binding.apply {
+                llData.visibility = View.VISIBLE
+                tvError.visibility = View.VISIBLE
+                pbLoading.visibility = View.VISIBLE
+            }
 
             swipe_refresh_layout.isRefreshing = false
         }

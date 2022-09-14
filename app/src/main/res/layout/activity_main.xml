@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.accenture.weathering.activities.MainActivity"/>
+            type="com.accenture.weathering.MainActivity"/>
     </data>
 
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,7 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg"
-    tools:context=".activities.MainActivity">
+    tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

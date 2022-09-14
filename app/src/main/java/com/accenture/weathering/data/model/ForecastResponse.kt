@@ -1,4 +1,4 @@
-package com.accenture.weathering.models
+package com.accenture.weathering.data.model
 
 import java.io.Serializable
 
