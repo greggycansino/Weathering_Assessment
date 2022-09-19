@@ -6,7 +6,7 @@ import com.accenture.weathering.data.util.Resource
 
 interface WeatherRepository {
 
-    suspend fun getCurrentWeather(): Resource<CurrentWeather>
+    suspend fun getCurrentWeather(lat: Double, lon: Double): Resource<CurrentWeather>
     suspend fun getForecast(): Resource<CurrentWeather>
     suspend fun getSearchCities(searchQuery: String): Resource<CurrentWeather>
 

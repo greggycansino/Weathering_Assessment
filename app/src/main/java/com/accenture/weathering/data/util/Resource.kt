@@ -1,7 +1,7 @@
 package com.accenture.weathering.data.util
 
 // a generic class that contains data and status about loading this data
-
+//keeps track of status returned from API
 sealed class Resource<T>(
     val data: T? = null,
     val message: String? = null

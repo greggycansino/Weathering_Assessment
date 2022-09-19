@@ -10,20 +10,19 @@ import retrofit2.http.Query
 interface WeatherAPI {
 
 //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-//    https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+//https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
         @GET("2.5/weather")
-        fun getWeather(
+        suspend fun getWeather(
             @Query("lat") lat: Double,
             @Query("lon") lon: Double,
-            @Query("units") units: String?,
             @Query("appid") appid: String= BuildConfig.APP_ID
-        ):Call<CurrentWeather>
+        ):Response<CurrentWeather>
 
          @GET("2.5/weather")
-         fun getCityData(
+         suspend fun getCityData(
         @Query("q") cityName: String,
         @Query("appid") appid: String= BuildConfig.APP_ID
-         ): Call<CurrentWeather>
+         ): Response<CurrentWeather>
 
 }
