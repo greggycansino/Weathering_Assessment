@@ -20,28 +20,45 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Insert
 import com.accenture.weathering.BuildConfig.APP_ID
 import com.accenture.weathering.databinding.ActivityMainBinding
 import com.accenture.weathering.data.model.CurrentWeather
 import com.accenture.weathering.data.api.WeatherAPIService
 import com.accenture.weathering.data.util.Constants
 import com.accenture.weathering.data.util.Constants.METRIC_UNIT
+import com.accenture.weathering.presentation.adapter.WeatherAdapter
+import com.accenture.weathering.presentation.viewmodel.WeatherViewModel
+import com.accenture.weathering.presentation.viewmodel.WeatherViewModelFactory
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-        private lateinit var binding:ActivityMainBinding
+    @Inject
+    lateinit var factory: WeatherViewModelFactory
+    @Inject
+    lateinit var weatherAdapter: WeatherAdapter
+    lateinit var viewModel: WeatherViewModel
+
+    private lateinit var binding:ActivityMainBinding
+    private lateinit var navController: NavController
 //
 //
 //    private lateinit var mFusedLocationClient: FusedLocationProviderClient
@@ -59,9 +76,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-    val navHostFragment = supportFragmentManager.findFragmentById(R.id.weatherFragment) as NavHostFragment
-    val navController = navHostFragment.navController
+    val navController = Navigation.findNavController(this, R.id.weatherFragment)
     binding.bnvWeather.setupWithNavController(navController)
+    NavigationUI.setupActionBarWithNavController(this, navController)
+
+    viewModel = ViewModelProvider(this,factory)
+        .get(WeatherViewModel::class.java)
 //
 //        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 //
@@ -105,6 +125,10 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, null)
     }
 
 //
