@@ -51,6 +51,7 @@ class FiveDayFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let {
                         weatherAdapter.differ.submitList()
+
                     }
                 }
                 is com.accenture.weathering.data.util.Resource.Error -> {

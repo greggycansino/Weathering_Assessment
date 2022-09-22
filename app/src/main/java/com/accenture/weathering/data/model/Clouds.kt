@@ -1,7 +1,8 @@
 package com.accenture.weathering.data.model
 
-import java.io.Serializable
+import com.google.gson.annotations.SerializedName
 
 data class Clouds(
+    @SerializedName("all")
     val all: Int
-): Serializable
+)

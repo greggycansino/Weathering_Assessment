@@ -1,11 +1,13 @@
 package com.accenture.weathering.data.model
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class Sys(
+    @SerializedName("country")
     val country: String,
-    val id: Int,
+    @SerializedName("sunrise")
     val sunrise: Int,
-    val sunset: Int,
-    val type: Int
-): Serializable
+    @SerializedName("sunset")
+    val sunset: Int
+)

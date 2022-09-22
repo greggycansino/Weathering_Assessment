@@ -12,17 +12,24 @@ interface WeatherAPI {
 //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 //https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
-        @GET("2.5/weather")
-        suspend fun getWeather(
-            @Query("lat") lat: Double,
-            @Query("lon") lon: Double,
-            @Query("appid") appid: String= BuildConfig.APP_ID
-        ):Response<CurrentWeather>
+    @GET("2.5/weather")
+    suspend fun getWeather(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") appid: String= BuildConfig.APP_ID
+    ):Response<CurrentWeather>
 
-         @GET("2.5/weather")
-         suspend fun getCityData(
+    @GET("2.5/weather")
+    suspend fun getCityData(
         @Query("q") cityName: String,
         @Query("appid") appid: String= BuildConfig.APP_ID
-         ): Response<CurrentWeather>
+    ): Response<CurrentWeather>
+
+    @GET("2.5/forecast")
+    suspend fun getForecast(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") appid: String= BuildConfig.APP_ID
+    ):Response<CurrentWeather>
 
 }

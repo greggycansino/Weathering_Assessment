@@ -80,8 +80,7 @@ class MainActivity : AppCompatActivity() {
     binding.bnvWeather.setupWithNavController(navController)
     NavigationUI.setupActionBarWithNavController(this, navController)
 
-    viewModel = ViewModelProvider(this,factory)
-        .get(WeatherViewModel::class.java)
+    viewModel = ViewModelProvider(this,factory)[WeatherViewModel::class.java]
 //
 //        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 //

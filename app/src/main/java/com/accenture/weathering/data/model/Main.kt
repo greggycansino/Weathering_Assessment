@@ -1,11 +1,17 @@
 package com.accenture.weathering.data.model
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class Main(
+    @SerializedName("humidity")
     val humidity: Int,
+    @SerializedName("pressure")
     val pressure: Int,
+    @SerializedName("temp")
     val temp: Double,
-    val temp_max: Double,
-    val temp_min: Double
-): Serializable
+    @SerializedName("temp_max")
+    val tempMax: Double,
+    @SerializedName("temp_min")
+    val tempMin: Double
+)
