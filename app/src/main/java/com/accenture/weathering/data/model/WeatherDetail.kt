@@ -7,9 +7,9 @@ import com.accenture.weathering.data.model.WeatherDetail.Companion.TABLE_NAME
 /**
  * Data class for Database entity and Serialization.
  */
+
 @Entity(tableName = TABLE_NAME)
 data class WeatherDetail(
-
     @PrimaryKey
     var id: Int? = 0,
     var temp: Double? = null,
@@ -17,7 +17,6 @@ data class WeatherDetail(
     var cityName: String? = null,
     var countryName: String? = null,
     var dateTime: String? = null,
-    var description: String? = null
 ) {
     companion object {
         const val TABLE_NAME = "weather_detail"

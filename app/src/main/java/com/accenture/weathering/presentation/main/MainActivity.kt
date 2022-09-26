@@ -1,64 +1,41 @@
-package com.accenture.weathering
+package com.accenture.weathering.presentation.main
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.location.Location
-import android.location.LocationManager
-import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
-import android.provider.Settings
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import androidx.room.Insert
-import com.accenture.weathering.BuildConfig.APP_ID
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.accenture.weathering.R
+import com.accenture.weathering.data.util.*
+import com.accenture.weathering.data.util.Constants.DATE_FORMAT
+import com.accenture.weathering.data.util.Constants.WEATHER_API_IMAGE_ENDPOINT
 import com.accenture.weathering.databinding.ActivityMainBinding
-import com.accenture.weathering.data.model.CurrentWeather
-import com.accenture.weathering.data.api.WeatherAPIService
-import com.accenture.weathering.data.util.Constants
-import com.accenture.weathering.data.util.Constants.METRIC_UNIT
-import com.accenture.weathering.presentation.adapter.WeatherAdapter
-import com.accenture.weathering.presentation.viewmodel.WeatherViewModel
-import com.accenture.weathering.presentation.viewmodel.WeatherViewModelFactory
-import com.bumptech.glide.Glide
-import com.google.android.gms.location.*
-import com.google.gson.Gson
-import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
+import com.accenture.weathering.databinding.FragmentWeatherBinding
+import com.accenture.weathering.presentation.adapter.CustomAdapterSearchedCityTemperature
+import org.kodein.di.Constant
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.generic.instance
 import java.util.*
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var factory: WeatherViewModelFactory
-    @Inject
-    lateinit var weatherAdapter: WeatherAdapter
-    lateinit var viewModel: WeatherViewModel
+class MainActivity : AppCompatActivity(), KodeinAware {
 
-    private lateinit var binding:ActivityMainBinding
-    private lateinit var navController: NavController
+    override val kodein by closestKodein()
+    private lateinit var dataBind: FragmentWeatherBinding
+    private val factory: WeatherViewModelFactory by instance()
+    private val viewModel: WeatherViewModel by lazy {
+        ViewModelProvider(this, factory)[WeatherViewModel::class.java]
+    }
+    private lateinit var customAdapterSearchedCityTemperature: CustomAdapterSearchedCityTemperature
 //
 //
 //    private lateinit var mFusedLocationClient: FusedLocationProviderClient
@@ -71,16 +48,12 @@ class MainActivity : AppCompatActivity() {
 //
 //    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
+    dataBind = DataBindingUtil.setContentView(this@MainActivity, R.layout.fragment_weather)
+    setupUI()
+    observeAPICall()
+}
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-    val navController = Navigation.findNavController(this, R.id.weatherFragment)
-    binding.bnvWeather.setupWithNavController(navController)
-    NavigationUI.setupActionBarWithNavController(this, navController)
-
-    viewModel = ViewModelProvider(this,factory)[WeatherViewModel::class.java]
 //
 //        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 //
@@ -124,10 +97,95 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
+    private fun setupUI() {
+        initializeRecyclerView()
+        dataBind.inputFindCityWeather.setOnEditorActionListener { view, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.fetchWeatherDetailFromDb((view as EditText).text.toString())
+                viewModel.fetchAllWeatherDetailsFromDb()
+            }
+            false
+        }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController, null)
+    private fun initializeRecyclerView() {
+        customAdapterSearchedCityTemperature = CustomAdapterSearchedCityTemperature()
+        val mLayoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        dataBind.recyclerViewSearchedCityTemperature.apply {
+            layoutManager = mLayoutManager
+            itemAnimator = DefaultItemAnimator()
+            adapter = customAdapterSearchedCityTemperature
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun observeAPICall() {
+        viewModel.weatherLiveData.observe(this, EventObserver { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    dataBind.apply{
+                        dataBind.textLabelSearchForCity.hide()
+                        dataBind.imageLogo.hide()
+                        dataBind.constraintLayoutShowingTemp.show()
+                        dataBind.inputFindCityWeather.text?.clear()
+                    }
+
+                    resource.data.let { weatherDetail ->
+                        val iconCode = weatherDetail.icon?.replace("n", "d")
+                        AppUtil.setGlideImage(
+                            dataBind.imageWeatherSymbol,
+                            WEATHER_API_IMAGE_ENDPOINT + "${iconCode}@2x.png"
+                        )
+                        changeBgAccToTemp(iconCode)
+                        dataBind.textTodaysDate.text =
+                            AppUtil.getCurrentDateTime(DATE_FORMAT)
+                        dataBind.textTemperature.text = weatherDetail.temp.toString()
+                        dataBind.textCityName.text =
+                            "${weatherDetail.cityName?.replaceFirstChar {
+                                if (it.isLowerCase()) it.titlecase(
+                                    Locale.ROOT
+                                ) else it.toString()
+                            }}, ${weatherDetail.countryName}"
+                    }
+
+                }
+                is Resource.Error -> {
+                    showToast(resource.message)
+                }
+            }
+        })
+
+        viewModel.weatherDetailListLiveData.observe(this, EventObserver { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    if (resource.data.isEmpty()) {
+                        dataBind.recyclerViewSearchedCityTemperature.hide()
+                    } else {
+                        dataBind.recyclerViewSearchedCityTemperature.show()
+                        customAdapterSearchedCityTemperature.setData(resource.data)
+                    }
+                }
+                is Resource.Error -> {
+                    showToast(resource.message)
+                }
+            }
+        })
+    }
+
+    private fun changeBgAccToTemp(iconCode: String?) {
+        when (iconCode) {
+            "01d", "02d", "03d" -> dataBind.imageWeatherHumanReaction.setImageResource(R.drawable.cf_sunny)
+            "04d", "09d", "10d", "11d" -> dataBind.imageWeatherHumanReaction.setImageResource(R.drawable.cf_rain)
+            "13d", "50d" -> dataBind.imageWeatherHumanReaction.setImageResource(R.drawable.cf_snow)
+        }
     }
 
 //

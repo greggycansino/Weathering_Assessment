@@ -1,17 +1,27 @@
 package com.accenture.weathering.domain.repo
 
+import com.accenture.weathering.data.api.SafeApiRequest
+import com.accenture.weathering.data.api.WeatherAPI
 import com.accenture.weathering.data.model.CurrentWeather
-import com.accenture.weathering.data.util.Resource
+import com.accenture.weathering.data.model.WeatherDetail
+import com.accenture.weathering.domain.WeatherDatabase
 
+class WeatherRepository(
+    private val api: WeatherAPI,
+    private val db: WeatherDatabase
+) : SafeApiRequest() {
 
-interface WeatherRepository {
+    suspend fun findCityWeather(cityName: String): CurrentWeather = apiRequest {
+        api.findCityWeatherData(cityName)
+    }
 
-    suspend fun getCurrentWeather(lat: Double, lon: Double): Resource<CurrentWeather>
-    suspend fun getForecast(): Resource<CurrentWeather>
-    suspend fun getSearchCities(searchQuery: String): Resource<CurrentWeather>
+    suspend fun addWeather(weatherDetail: WeatherDetail) {
+        db.getWeatherDao().addWeather(weatherDetail)
+    }
 
-    //TODO: view, add, remove persistent list
-//    suspend fun saveNews(article: Article)
-//    suspend fun deleteNews(article: Article)
-//    fun getSavedNews(): Flow<List<Article>>
+    suspend fun fetchWeatherDetail(cityName: String): WeatherDetail? =
+        db.getWeatherDao().fetchWeatherByCity(cityName)
+
+    suspend fun fetchAllWeatherDetails(): List<WeatherDetail> =
+        db.getWeatherDao().fetchAllWeatherDetails()
 }
