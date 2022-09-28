@@ -7,20 +7,15 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.accenture.weathering.R
 import com.accenture.weathering.data.util.*
 import com.accenture.weathering.data.util.Constants.DATE_FORMAT
 import com.accenture.weathering.data.util.Constants.WEATHER_API_IMAGE_ENDPOINT
-import com.accenture.weathering.databinding.ActivityMainBinding
 import com.accenture.weathering.databinding.FragmentWeatherBinding
 import com.accenture.weathering.presentation.adapter.CustomAdapterSearchedCityTemperature
-import org.kodein.di.Constant
+import com.google.android.gms.location.FusedLocationProviderClient
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
@@ -36,9 +31,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         ViewModelProvider(this, factory)[WeatherViewModel::class.java]
     }
     private lateinit var customAdapterSearchedCityTemperature: CustomAdapterSearchedCityTemperature
-//
-//
-//    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 //
 //    private var mLatitude: Double = 0.0
 //    private var mLongitude: Double = 0.0
@@ -99,7 +93,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     private fun setupUI() {
         initializeRecyclerView()
-        dataBind.inputFindCityWeather.setOnEditorActionListener { view, actionId, event ->
+        dataBind.inputFindCityWeather.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.fetchWeatherDetailFromDb((view as EditText).text.toString())
                 viewModel.fetchAllWeatherDetailsFromDb()
@@ -130,10 +124,10 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 }
                 is Resource.Success -> {
                     dataBind.apply{
-                        dataBind.textLabelSearchForCity.hide()
-                        dataBind.imageLogo.hide()
-                        dataBind.constraintLayoutShowingTemp.show()
-                        dataBind.inputFindCityWeather.text?.clear()
+                        textLabelSearchForCity.hide()
+                        imageLogo.hide()
+                        constraintLayoutShowingTemp.show()
+                        inputFindCityWeather.text?.clear()
                     }
 
                     resource.data.let { weatherDetail ->
@@ -143,15 +137,32 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                             WEATHER_API_IMAGE_ENDPOINT + "${iconCode}@2x.png"
                         )
                         changeBgAccToTemp(iconCode)
-                        dataBind.textTodaysDate.text =
-                            AppUtil.getCurrentDateTime(DATE_FORMAT)
-                        dataBind.textTemperature.text = weatherDetail.temp.toString()
-                        dataBind.textCityName.text =
-                            "${weatherDetail.cityName?.replaceFirstChar {
-                                if (it.isLowerCase()) it.titlecase(
-                                    Locale.ROOT
-                                ) else it.toString()
-                            }}, ${weatherDetail.countryName}"
+
+                        dataBind.apply {
+                            textTodaysDate.text =
+                                AppUtil.getCurrentDateTime(DATE_FORMAT)
+                            textTemperature.text = weatherDetail.temp.toString()
+                            textCityName.text =
+                                "${weatherDetail.cityName?.replaceFirstChar {
+                                    if (it.isLowerCase()) it.titlecase(
+                                        Locale.ROOT
+                                    ) else it.toString()
+                                }}, ${weatherDetail.countryName}"
+                            AppUtil.setGlideImage(
+                                dataBind.imgWeatherPictures,
+                                WEATHER_API_IMAGE_ENDPOINT + "${iconCode}@2x.png"
+                            )
+                            tvMainDescription.text = weatherDetail.description
+                            tvMain.text = weatherDetail.main
+                            val humidityValue = weatherDetail.humidity.toString() + "%"
+                            tvHumidity.text = humidityValue
+                            val windSpeedValue = weatherDetail.wind_speed.toString() + "mpH"
+                            tvWindSpeed.text = windSpeedValue
+                            tvPressure.text = weatherDetail.pressure.toString()
+                            tvSunrise.text = AppUtil.unixTime(weatherDetail.sunrise!!).toString()
+                            tvSunset.text = AppUtil.unixTime(weatherDetail.sunset!!).toString()
+                        }
+
                     }
 
                 }

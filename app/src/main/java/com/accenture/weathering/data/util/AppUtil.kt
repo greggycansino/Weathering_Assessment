@@ -31,6 +31,14 @@ object AppUtil {
 //    .load("https://openweathermap.org/img/wn/" + weatherList.weather[z].icon + "@2x.png")
 //    .into(img_weather_pictures)
 
+    fun unixTime(timex: Int): String? {
+        val date = Date(timex * 1000L)
+        @SuppressLint("SimpleDateFormat")
+        val sdf = SimpleDateFormat("HH:mm")
+        sdf.timeZone = TimeZone.getDefault()
+        return sdf.format(date)
+    }
+
     @SuppressLint("SimpleDateFormat")
     fun getCurrentDateTime(dateFormat: String): String =
         SimpleDateFormat(dateFormat).format(Date())

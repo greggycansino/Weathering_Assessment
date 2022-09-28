@@ -37,8 +37,6 @@ interface WeatherAPI {
 //        @Query("appid") appid: String= BuildConfig.APP_ID
 //    ):Deferred<ForecastResponse>
 
-    // <editor-fold desc="Get Requests">
-
     @GET("weather")
     suspend fun findCityWeatherData(
         @Query("q") q: String,
@@ -46,14 +44,11 @@ interface WeatherAPI {
         @Query("appid") appid: String = BuildConfig.APP_ID
     ): Response<CurrentWeather>
 
-    // </editor-fold>
-
     companion object {
         operator fun invoke(
             networkConnectionInterceptor: NetworkConnectionInterceptor
         ): WeatherAPI {
 
-            val WS_SERVER_URL = BuildConfig.BASE_URL
             val okkHttpclient = OkHttpClient.Builder()
                 .addInterceptor(networkConnectionInterceptor)
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -64,7 +59,7 @@ interface WeatherAPI {
 
             return Retrofit.Builder()
                 .client(okkHttpclient)
-                .baseUrl(WS_SERVER_URL)
+                .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WeatherAPI::class.java)

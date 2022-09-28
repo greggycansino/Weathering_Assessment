@@ -46,7 +46,6 @@ class CustomAdapterSearchedCityTemperature :
     inner class ViewHolder(private val binding: ItemSearchedCityBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        @SuppressLint("SetTextI18n")
         fun bindItems(weatherDetail: WeatherDetail) {
             binding.apply {
                 val iconCode = weatherDetail.icon?.replace("n", "d")
@@ -54,12 +53,12 @@ class CustomAdapterSearchedCityTemperature :
                     imageWeatherSymbol,
                     Constants.WEATHER_API_IMAGE_ENDPOINT + "${iconCode}@4x.png"
                 )
-                textCityName.text =
-                    "${weatherDetail.cityName?.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.ROOT
-                        ) else it.toString()
-                    }}, ${weatherDetail.countryName}"
+                val weatherCityValue = "${weatherDetail.cityName?.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(
+                        Locale.ROOT
+                    ) else it.toString()
+                }}, ${weatherDetail.countryName}"
+                textCityName.text = weatherCityValue
                 textTemperature.text = weatherDetail.temp.toString()
                 textDateTime.text = weatherDetail.dateTime
             }
