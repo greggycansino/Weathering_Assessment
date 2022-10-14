@@ -1,6 +1,5 @@
 package com.accenture.weathering.presentation.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -11,7 +10,6 @@ import com.accenture.weathering.data.util.AppUtil
 import com.accenture.weathering.data.util.Constants
 import com.accenture.weathering.databinding.ItemSearchedCityBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class CustomAdapterSearchedCityTemperature :

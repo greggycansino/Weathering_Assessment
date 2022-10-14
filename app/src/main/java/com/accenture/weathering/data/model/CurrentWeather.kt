@@ -18,7 +18,7 @@ data class CurrentWeather(
     @SerializedName("id")
     val id: Int,
     @SerializedName("main")
-    val main: Main,
+    val main: MainTemp,
     @SerializedName("name")
     val name: String,
     @SerializedName("sys")

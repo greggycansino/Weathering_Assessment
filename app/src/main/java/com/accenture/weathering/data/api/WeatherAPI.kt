@@ -1,8 +1,9 @@
 package com.accenture.weathering.data.api
 
-import com.accenture.weathering.BuildConfig
 import com.accenture.weathering.data.model.CurrentWeather
 import com.accenture.weathering.data.util.Constants
+import com.accenture.weathering.data.util.Constants.APP_ID
+import com.accenture.weathering.data.util.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -17,31 +18,11 @@ interface WeatherAPI {
 //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 //https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
-//    @GET("weather")
-//    suspend fun getWeather(
-//        @Query("lat") lat: Double,
-//        @Query("lon") lon: Double,
-//        @Query("appid") appid: String= BuildConfig.APP_ID
-//    ):Deferred<CurrentWeather>
-//
-//    @GET("weather")
-//    suspend fun getCityData(
-//        @Query("q") cityName: String,
-//        @Query("appid") appid: String= BuildConfig.APP_ID
-//    ): Deferred<CurrentWeather>
-//
-//    @GET("forecast")
-//    suspend fun getForecast(
-//        @Query("lat") lat: Double,
-//        @Query("lon") lon: Double,
-//        @Query("appid") appid: String= BuildConfig.APP_ID
-//    ):Deferred<ForecastResponse>
-
     @GET("weather")
     suspend fun findCityWeatherData(
         @Query("q") q: String,
         @Query("units") units: String = Constants.WEATHER_UNIT,
-        @Query("appid") appid: String = BuildConfig.APP_ID
+        @Query("appid") appid: String = APP_ID
     ): Response<CurrentWeather>
 
     companion object {
@@ -59,7 +40,7 @@ interface WeatherAPI {
 
             return Retrofit.Builder()
                 .client(okkHttpclient)
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WeatherAPI::class.java)

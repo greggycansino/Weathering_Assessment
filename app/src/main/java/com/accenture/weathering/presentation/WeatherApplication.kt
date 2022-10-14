@@ -5,6 +5,7 @@ import com.accenture.weathering.data.api.NetworkConnectionInterceptor
 import com.accenture.weathering.data.api.WeatherAPI
 import com.accenture.weathering.domain.WeatherDatabase
 import com.accenture.weathering.domain.repo.WeatherRepository
+import com.accenture.weathering.domain.usecases.*
 import com.accenture.weathering.presentation.main.WeatherViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -22,6 +23,11 @@ class WeatherApplication : Application(), KodeinAware {
         bind() from singleton { NetworkConnectionInterceptor(instance()) }
         bind() from singleton { WeatherAPI(instance()) }
         bind() from singleton { WeatherRepository(instance(), instance()) }
+        bind() from singleton { GeneralUseCases(instance(), instance(), instance(), instance()) }
+        bind() from provider { AddWeatherUseCase(instance()) }
+        bind() from provider { FindCityWeatherUseCase(instance()) }
+        bind() from provider { GetWeatherDetailListUseCase(instance()) }
+        bind() from provider { GetWeatherDetailUseCase(instance()) }
         bind() from provider { WeatherViewModelFactory(instance()) }
         bind() from provider { WeatherDatabase(instance()) }
     }

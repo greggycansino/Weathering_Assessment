@@ -1,7 +1,6 @@
 package com.accenture.weathering.data.model
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class ForecastResponse(
     @SerializedName("city")

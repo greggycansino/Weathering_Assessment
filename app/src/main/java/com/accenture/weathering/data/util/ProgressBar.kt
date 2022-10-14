@@ -1,6 +1,5 @@
 package com.accenture.weathering.data.util
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.view.Window
@@ -12,7 +11,6 @@ class ProgressBar {
 
     companion object {
 
-        @SuppressLint("StaticFieldLeak")
         private var gifProgress: ProgressBar? = null
 
         fun getInstance(): ProgressBar {

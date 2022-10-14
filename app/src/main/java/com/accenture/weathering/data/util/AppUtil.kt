@@ -27,10 +27,6 @@ object AppUtil {
 
     }
 
-//    Glide.with(this)
-//    .load("https://openweathermap.org/img/wn/" + weatherList.weather[z].icon + "@2x.png")
-//    .into(img_weather_pictures)
-
     fun unixTime(timex: Int): String? {
         val date = Date(timex * 1000L)
         @SuppressLint("SimpleDateFormat")
