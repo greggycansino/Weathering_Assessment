@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Weathering</string>
-    <string name="error_message">An error occured. Please try again later.</string>
+    <string name="error_message">An error occurred. Please try again later.</string>
     <string name="enter_location">Enter Location</string>
     <string name="weather_main">Sunny</string>
     <string name="sunrise">Sunrise</string>
     <string name="time_8_00">08:00 AM</string>
-    <string name="condition_main">condition</string>
+    <string name="condition_main">Condition</string>
     <string name="search_bar">search bar</string>
-    <string name="temperature_29_c">29°C</string>
-    <string name="weather_picture">weather picture</string>
+    <string name="temperature_c">°C</string>
+    <string name="weather_picture">current weather icon</string>
     <string name="humidity">Humidity</string>
     <string name="humid_label">78%</string>
     <string name="wind">Wind</string>
@@ -21,6 +21,10 @@
     <string name="sunset_image">sunset time</string>
     <string name="sunset_image_label">sunset time</string>
     <string name="sunrise_image_label">Sunrise time</string>
-    <string name="city_code">PH</string>
-    <string name="Manila_label">Manila</string>
+    <string name="Manila_label">Manila, PH</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_for_a_place">Search for a place.</string>
+    <string name="today">Today</string>
+    <string name="image_logo">image logo</string>
 </resources>
